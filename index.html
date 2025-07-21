@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Responsive iCal Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f8ff;
+      padding: 1rem;
+    }
+
+    #calendar {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 1rem;
+    }
+
+    .fc-daygrid-event {
+      background-color: #4f46e5 !important;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      padding: 2px 4px;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+  <div id="calendar"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/icalendar@6.1.10/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [FullCalendarDayGrid, FullCalendarInteraction, FullCalendarICalendar],
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: ''
+        },
+        events: {
+          url: 'YOUR_PUBLIC_ICAL_URL_HERE',
+          format: 'ics'
+        },
+        eventClick: function (info) {
+          const event = info.event;
+          const details = `
+            <strong>${event.title}</strong><br/>
+            Start: ${event.start.toLocaleString()}<br/>
+            End: ${event.end ? event.end.toLocaleString() : 'N/A'}<br/>
+            ${event.extendedProps.description || ''}
+          `;
+          alert(details);
+        }
+      });
+
+      calendar.render();
+    });
+  </script>
+</body>
+</html>
